@@ -22,7 +22,6 @@ export const createTaskController = async (req: Request, res: Response) => {
     fileData = await readFile(TASK_FILE, "utf-8");
     parsedFileData = JSON.parse(fileData);
   } catch (error: any) {
-    console.log("Error reading tasks file:", error);
     if (error.code === "ENOENT") {
       await writeFile(TASK_FILE, JSON.stringify([], null, 2));
     }

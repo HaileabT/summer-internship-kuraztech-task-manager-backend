@@ -1,4 +1,5 @@
-import { readFile, writeFile } from "fs/promises";
+import { mkdir } from "fs";
+import { readdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 
 const TASK_ID_FILE = path.join(__dirname, "../data/current_task.json");
@@ -10,8 +11,12 @@ export const getLatestTaskId = async () => {
     fileData = await readFile(TASK_ID_FILE, "utf-8");
     parsedFileData = JSON.parse(fileData);
   } catch (error: any) {
-    console.log("Error reading tasks file:", error);
     if (error.code === "ENOENT") {
+      const dir = await readdir(path.join(__dirname, "../data")).catch(() =>
+        mkdir(path.join(__dirname, "../data"), () => {})
+      );
+      await writeFile(TASK_ID_FILE, JSON.stringify({ current_id: 0 }, null, 2));
+
       await writeFile(TASK_ID_FILE, JSON.stringify({ current_id: 0 }, null, 2));
     }
     parsedFileData = { current_id: 0 };
