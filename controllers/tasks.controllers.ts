@@ -59,7 +59,7 @@ export const getTasksController = async (req: Request, res: Response) => {
   } catch (error: any) {
     if (error.code === "ENOENT") {
       const noTaskError: APIResponse = {
-        status: "error",
+        status: "success",
         data: [],
       };
       res.status(404).json(noTaskError);
